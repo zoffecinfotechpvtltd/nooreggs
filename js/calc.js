@@ -43,17 +43,26 @@ export function deliveryStats(entry, day) {
 // per-day numbers
 export function dayStats(k) {
   const d = state.days[k];
-  if (!d) return { eggs: 0, sell: 0, buy: 0, profit: 0, got: 0, pend: 0 };
-  let eggs = 0, sell = 0, buy = 0, recv = 0, pay = 0;
+  if (!d) return { eggs: 0, sell: 0, buy: 0, profit: 0, got: 0, pend: 0, cash: 0, gpay: 0 };
+  let eggs = 0, sell = 0, buy = 0, recv = 0, pay = 0, cash = 0, gpay = 0;
   for (const cid in (d.deliveries || {})) {
     const s = deliveryStats(d.deliveries[cid], d);
+    const entry = d.deliveries[cid];
     eggs += s.eggs;
     sell += s.sale;
     buy += s.buy;
     recv += s.received;
+    if (entry.paymentMethod === "gpay") gpay += s.received;
+    else cash += s.received;
   }
-  for (const cid in (d.payments || {})) pay += paymentAmount(d.payments[cid]);
-  return { eggs, sell, buy, profit: sell - buy, got: recv + pay, pend: sell - recv };
+  for (const cid in (d.payments || {})) {
+    const p = d.payments[cid];
+    const amt = paymentAmount(p);
+    pay += amt;
+    if (p && typeof p === "object" && p.method === "gpay") gpay += amt;
+    else cash += amt;
+  }
+  return { eggs, sell, buy, profit: sell - buy, got: recv + pay, pend: sell - recv, cash, gpay };
 }
 
 // cumulative balance per customer across ALL days

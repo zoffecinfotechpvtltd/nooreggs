@@ -86,9 +86,11 @@ function rowRead(cid) {
 function paymentMethodControl(cid, method) {
   return `<div class="pay-method">
     <label><input type="radio" name="pm_${cid}" value="cash" data-pay-method="${cid}"${method === "cash" ? " checked" : ""}><span>Cash</span></label>
-    <label><input type="radio" name="pm_${cid}" value="gpay" data-pay-method="${cid}"${method === "gpay" ? " checked" : ""}><span class="gpay-option"><span class="gpay-mark" aria-hidden="true"></span><span>GPay</span></span></label>
+    <label><input type="radio" name="pm_${cid}" value="gpay" data-pay-method="${cid}"${method === "gpay" ? " checked" : ""}><span class="gpay-option">${GPAY_ICON}<span>GPay</span></span></label>
   </div>`;
 }
+
+const GPAY_ICON = `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" style="flex-shrink:0"><circle cx="5.5" cy="5.5" r="4.8" fill="#4285F4"/><circle cx="16.5" cy="5.5" r="4.8" fill="#EA4335"/><circle cx="5.5" cy="16.5" r="4.8" fill="#34A853"/><circle cx="16.5" cy="16.5" r="4.8" fill="#FBBC05"/></svg>`;
 function recalcRow(cid) {
   const d = ensureDay(getSheetKey()), v = rowRead(cid);
   const s = deliveryStats(v, d);

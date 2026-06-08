@@ -57,6 +57,30 @@
         <div class="stat clay"><div class="k">⏳ Pending today</div><div class="v" id="hPendDay">₹0</div></div>
         <div class="stat clay"><div class="k">📌 Total dues</div><div class="v" id="hDuesAll">₹0</div></div>
       </div>
+      <div class="card collect-split-card" id="collectSplitCard" style="display:none">
+        <div class="split-title">Today's Collection</div>
+        <div class="collect-split-body">
+          <div id="splitDonut"></div>
+          <div class="split-legend">
+            <div class="split-item">
+              <div class="split-dot" style="background:#34A853"></div>
+              <div>
+                <div class="split-k">Cash</div>
+                <div class="split-v" id="splitCash">₹0</div>
+                <div class="split-p" id="splitCashPct">0%</div>
+              </div>
+            </div>
+            <div class="split-item">
+              <div class="split-dot" style="background:#4285F4"></div>
+              <div>
+                <div class="split-k">GPay</div>
+                <div class="split-v" id="splitGpay">₹0</div>
+                <div class="split-p" id="splitGpayPct">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <button class="btn btn-saffron" style="margin-top:14px" data-nav="sheet">📝 Fill Today's Sheet</button>
       <div class="section-h"><h3>Top pending customers</h3><button class="lnk" data-nav="dues">See all →</button></div>
       <div id="todayDues"></div>
@@ -177,7 +201,7 @@
   <div class="field"><label>Amount collected now ₹</label><input id="colAmt" type="number" inputmode="numeric" placeholder="0"></div>
   <div class="field"><label>Payment method</label><div class="pay-method collect-pay">
     <label><input type="radio" name="collectMethod" value="cash" checked><span>Cash</span></label>
-    <label><input type="radio" name="collectMethod" value="gpay"><span class="gpay-option"><span class="gpay-mark" aria-hidden="true"></span><span>GPay</span></span></label>
+    <label><input type="radio" name="collectMethod" value="gpay"><span class="gpay-option"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" style="flex-shrink:0"><circle cx="5.5" cy="5.5" r="4.8" fill="#4285F4"/><circle cx="16.5" cy="5.5" r="4.8" fill="#EA4335"/><circle cx="5.5" cy="16.5" r="4.8" fill="#34A853"/><circle cx="16.5" cy="16.5" r="4.8" fill="#FBBC05"/></svg><span>GPay</span></span></label>
   </div></div>
   <button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:6px" data-act="collect-full">Collect full pending</button>
   <button class="btn btn-mint" style="margin-top:10px" data-act="save-collect">Save Collection</button>

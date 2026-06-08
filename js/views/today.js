@@ -18,6 +18,7 @@ export function renderToday() {
   document.getElementById("hPendDay").textContent = rupee(st.pend);
   document.getElementById("hDuesAll").textContent = rupee(totalDues());
   renderSpark();
+  renderCollectionSplit(st);
 
   const bal = outstanding();
   const top = state.customers
@@ -28,6 +29,41 @@ export function renderToday() {
   document.getElementById("todayDues").innerHTML = top.length
     ? top.map(x => dueRow(x.c, x.b, false)).join("")
     : `<div class="empty"><div class="big">✅</div>No pending payments. Everyone has paid!</div>`;
+}
+
+function renderCollectionSplit(st) {
+  const card = document.getElementById("collectSplitCard");
+  if (!card) return;
+  const { cash, gpay, got } = st;
+  if (got <= 0) { card.style.display = "none"; return; }
+  card.style.display = "";
+  document.getElementById("splitDonut").innerHTML = collectionDonut(cash, gpay);
+  document.getElementById("splitCash").textContent = rupee(cash);
+  document.getElementById("splitGpay").textContent = rupee(gpay);
+  const cashPct = Math.round((cash / got) * 100);
+  document.getElementById("splitCashPct").textContent = cashPct + "%";
+  document.getElementById("splitGpayPct").textContent = (100 - cashPct) + "%";
+}
+
+function collectionDonut(cash, gpay) {
+  const total = cash + gpay;
+  const R = 30, cx = 44, cy = 44, sw = 13;
+  const C = +(2 * Math.PI * R).toFixed(2);
+  if (total <= 0) {
+    return `<svg width="88" height="88" viewBox="0 0 88 88"><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--line)" stroke-width="${sw}" opacity=".5"/></svg>`;
+  }
+  const cashLen = +((cash / total) * C).toFixed(2);
+  const gpayLen = +((gpay / total) * C).toFixed(2);
+  let cashArc = "", gpayArc = "";
+  if (cash > 0 && gpay === 0) {
+    cashArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#34A853" stroke-width="${sw}"/>`;
+  } else if (gpay > 0 && cash === 0) {
+    gpayArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#4285F4" stroke-width="${sw}"/>`;
+  } else {
+    cashArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#34A853" stroke-width="${sw}" stroke-dasharray="${cashLen} ${C}" stroke-dashoffset="0"/>`;
+    gpayArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#4285F4" stroke-width="${sw}" stroke-dasharray="${gpayLen} ${C}" stroke-dashoffset="${+(C - cashLen).toFixed(2)}"/>`;
+  }
+  return `<svg width="88" height="88" viewBox="0 0 88 88" style="transform:rotate(-90deg)">${cashArc}${gpayArc}</svg>`;
 }
 
 function renderSpark() {

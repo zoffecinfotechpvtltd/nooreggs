@@ -32,8 +32,7 @@
 .pay-method input{position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;}
 .pay-method input + span{height:42px; display:flex; align-items:center; justify-content:center; gap:8px; border:1.7px solid var(--line); border-radius:12px; background:var(--paper-2); color:var(--ink-2); font-size:13px; font-weight:800; transition:border-color .15s, background .15s, color .15s, box-shadow .15s;}
 .pay-method input:checked + span{border-color:var(--saffron); background:#fff7e8; color:var(--ink); box-shadow:0 3px 10px rgba(207,116,21,.12);}
-.gpay-option span{height:auto; border:0; border-radius:0; background:transparent; box-shadow:none;}
-.gpay-mark{width:26px; height:20px; flex:0 0 26px; background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 64'%3E%3Cg fill='none' stroke-linecap='round' stroke-width='20'%3E%3Cpath d='M20 38 36 12' stroke='%234285F4'/%3E%3Cpath d='M38 12 66 28' stroke='%2334A853'/%3E%3Cpath d='M36 52 50 28' stroke='%23FBBC05'/%3E%3Cpath d='M66 28 54 50' stroke='%23EA4335'/%3E%3C/g%3E%3C/svg%3E");}
+.gpay-option span{height:auto; border:0; border-radius:0; background:transparent; box-shadow:none; flex-shrink:0;}
 .collect-pay{margin-bottom:8px;}
 .srow-calc{display:flex; gap:8px; margin-top:12px;}
 .srow-calc .c{flex:1; text-align:center; background:var(--paper-2); border:1px solid var(--line-2); border-radius:11px; padding:7px 4px;}
@@ -45,6 +44,18 @@
 .quick-title small{display:block; font-family:"DM Sans"; font-size:12px; color:var(--muted); font-weight:600; margin-top:2px;}
 .quick-card .srow:last-child{margin-bottom:0;}
 .section-h.compact{margin:17px 4px 10px;}
+
+/* ---------- Today collection split ---------- */
+.collect-split-card{margin-top:12px;}
+.split-title{font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px;}
+.collect-split-body{display:flex; align-items:center; gap:18px;}
+#splitDonut{flex:0 0 88px; line-height:0;}
+.split-legend{flex:1; display:flex; flex-direction:column; gap:13px;}
+.split-item{display:flex; align-items:center; gap:11px;}
+.split-dot{width:11px; height:11px; border-radius:50%; flex:0 0 11px;}
+.split-k{font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em;}
+.split-v{font-size:22px; font-family:"Fraunces"; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.15;}
+.split-p{font-size:11px; font-weight:700; color:var(--muted); margin-top:1px;}
 
 /* profile strip (more) */
 .profile-strip{display:flex; align-items:center; gap:14px; background:var(--paper); border:1px solid var(--line); border-radius:var(--r); padding:17px; box-shadow:var(--shadow-sm); margin-bottom:14px;}
