@@ -1,4 +1,4 @@
-# NOOR EGGS CENTRE - Daily Ledger by Danish
+# NOOR EGGS CENTRE - Daily Ledger by Danish Shaikh
 
 A mobile-first local ledger app for Noor Eggs, fixed for proprietor Danish Shaikh. It tracks daily egg sales, profit, customer dues, collections, records, and payment method by Cash or GPay.
 
