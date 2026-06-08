@@ -38,7 +38,6 @@ function persistLocal() {
 
 // ---------- init ----------
 export async function initBackend() {
-  session.cloud = false;
   session.user = { email: "Danish Shaikh", uid: "local" };
 }
 

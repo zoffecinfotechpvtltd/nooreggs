@@ -2,7 +2,7 @@
 //  views/sheet.js — the daily entry sheet
 // ============================================================
 import { state } from "../state.js";
-import { ensureDay, outstanding } from "../calc.js";
+import { deliveryStats, ensureDay, outstanding } from "../calc.js";
 import { rupee, esc, todayKey, dayLabel } from "../utils.js";
 import { openM, closeM, toast } from "../ui.js";
 import { saveDay } from "../backend.js";
@@ -91,11 +91,10 @@ function paymentMethodControl(cid, method) {
 }
 function recalcRow(cid) {
   const d = ensureDay(getSheetKey()), v = rowRead(cid);
-  const sale = v.eggs / 100 * (d.sellRate || 0);
-  const profit = sale - v.eggs / 100 * (d.buyRate || 0);
-  const pend = sale - v.received;
-  document.getElementById("sl_" + cid).textContent = rupee(sale);
-  document.getElementById("pf_" + cid).textContent = rupee(profit);
+  const s = deliveryStats(v, d);
+  const pend = s.pending;
+  document.getElementById("sl_" + cid).textContent = rupee(s.sale);
+  document.getElementById("pf_" + cid).textContent = rupee(s.profit);
   const pd = document.getElementById("pd_" + cid), pc = pd.parentNode;
   pd.textContent = pend > 0 ? rupee(pend) : (pend < 0 ? rupee(-pend) + " adv" : "₹0");
   pc.classList.toggle("zero", pend <= 0);
@@ -105,9 +104,9 @@ function recalcTotals() {
   const d = ensureDay(getSheetKey());
   let eggs = 0, sale = 0, cost = 0, rec = 0;
   state.customers.forEach(c => {
-    const v = rowRead(c.id);
-    eggs += v.eggs; sale += v.eggs / 100 * (d.sellRate || 0);
-    cost += v.eggs / 100 * (d.buyRate || 0); rec += v.received;
+    const s = deliveryStats(rowRead(c.id), d);
+    eggs += s.eggs; sale += s.sale;
+    cost += s.buy; rec += s.received;
   });
   const profit = sale - cost, pend = sale - rec;
   document.getElementById("sheetTotals").innerHTML = `

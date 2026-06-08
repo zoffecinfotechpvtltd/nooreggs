@@ -35,7 +35,6 @@ async function startApp() {
   document.getElementById("screen-loading").style.display = "flex";
   try {
     await loadAll();
-    document.getElementById("screen-auth")?.classList.remove("show");
     document.getElementById("screen-loading").style.display = "none";
     document.getElementById("app").classList.add("show");
     document.getElementById("uAvatar").textContent = initials(session.user.email);

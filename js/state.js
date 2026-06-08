@@ -9,6 +9,5 @@ export const state = {
 };
 
 export const session = {
-  cloud: false,
   user: { email: "Danish Shaikh", uid: "local" }
 };

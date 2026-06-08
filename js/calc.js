@@ -23,18 +23,36 @@ export function ensureDay(k) {
   return d;
 }
 
+export function deliveryStats(entry, day) {
+  const eggs = +(entry && entry.eggs) || 0;
+  const received = +(entry && entry.received) || 0;
+  const sellRate = +(day && day.sellRate) || 0;
+  const buyRate = +(day && day.buyRate) || 0;
+  const sale = eggs / 100 * sellRate;
+  const buy = eggs / 100 * buyRate;
+  return {
+    eggs,
+    received,
+    sale,
+    buy,
+    profit: sale - buy,
+    pending: sale - received
+  };
+}
+
 // per-day numbers
 export function dayStats(k) {
   const d = state.days[k];
   if (!d) return { eggs: 0, sell: 0, buy: 0, profit: 0, got: 0, pend: 0 };
-  let eggs = 0, recv = 0, pay = 0;
+  let eggs = 0, sell = 0, buy = 0, recv = 0, pay = 0;
   for (const cid in (d.deliveries || {})) {
-    eggs += +d.deliveries[cid].eggs || 0;
-    recv += +d.deliveries[cid].received || 0;
+    const s = deliveryStats(d.deliveries[cid], d);
+    eggs += s.eggs;
+    sell += s.sale;
+    buy += s.buy;
+    recv += s.received;
   }
   for (const cid in (d.payments || {})) pay += paymentAmount(d.payments[cid]);
-  const sell = (eggs / 100) * (d.sellRate || 0);
-  const buy = (eggs / 100) * (d.buyRate || 0);
   return { eggs, sell, buy, profit: sell - buy, got: recv + pay, pend: sell - recv };
 }
 
@@ -46,9 +64,8 @@ export function outstanding() {
   for (const k in state.days) {
     const d = state.days[k];
     for (const cid in (d.deliveries || {})) {
-      const e = d.deliveries[cid];
-      const sale = (+e.eggs || 0) / 100 * (d.sellRate || 0);
-      bal[cid] = (bal[cid] || 0) + sale - (+e.received || 0);
+      const s = deliveryStats(d.deliveries[cid], d);
+      bal[cid] = (bal[cid] || 0) + s.pending;
     }
     for (const cid in (d.payments || {})) {
       bal[cid] = (bal[cid] || 0) - paymentAmount(d.payments[cid]);

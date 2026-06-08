@@ -2,7 +2,7 @@
 //  views/records.js - daily history and date-wise inspection
 // ============================================================
 import { state } from "../state.js";
-import { dayStats, paymentAmount } from "../calc.js";
+import { dayStats, deliveryStats, paymentAmount } from "../calc.js";
 import { rupee, dayLabelShort, weekday, dayLabel, esc } from "../utils.js";
 import { deleteDayDoc } from "../backend.js";
 import { toast, confirmDo } from "../ui.js";
@@ -120,12 +120,11 @@ function recordCustomerRows(k) {
   const rows = [];
   for (const cid in (d.deliveries || {})) {
     const e = d.deliveries[cid] || {};
-    const eggs = +e.eggs || 0;
-    const rec = +e.received || 0;
-    if (eggs <= 0 && rec <= 0) continue;
+    const s = deliveryStats(e, d);
+    if (s.eggs <= 0 && s.received <= 0) continue;
     const c = state.customers.find(x => x.id === cid);
-    const sale = eggs / 100 * (d.sellRate || 0);
-    rows.push({ name: c ? c.name : "Old customer", eggs, sale, rec, pending: sale - rec, method: e.paymentMethod || "" });
+    const extraPay = paymentAmount((d.payments || {})[cid]);
+    rows.push({ name: c ? c.name : "Old customer", eggs: s.eggs, sale: s.sale, rec: s.received + extraPay, pending: s.pending - extraPay, method: e.paymentMethod || "" });
   }
   for (const cid in (d.payments || {})) {
     const pay = d.payments[cid];

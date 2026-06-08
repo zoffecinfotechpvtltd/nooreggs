@@ -1,25 +1,6 @@
 /* ============================================================
-   NOOR EGGS — views.css (auth + sheet specifics)
+   NOOR EGGS - views.css (sheet specifics)
    ============================================================ */
-
-/* ---------- Auth ---------- */
-#screen-auth{display:none; min-height:100dvh; flex-direction:column; padding:0 22px calc(34px + var(--safe-bot)); position:relative; z-index:1;}
-#screen-auth.show{display:flex;}
-.auth-hero{padding:calc(50px + var(--safe-top)) 4px 22px; text-align:center;}
-.auth-hero img{height:100px; filter:drop-shadow(0 10px 20px rgba(120,70,0,.22)); margin:0 auto 8px;}
-.auth-hero .brand{font-family:"Fraunces"; font-weight:600; font-size:27px; letter-spacing:.01em;}
-.auth-hero .tag{color:var(--muted); font-weight:500; font-size:14px; margin-top:5px;}
-.auth-card{background:var(--paper); border:1px solid var(--line); border-radius:26px; padding:26px 22px; box-shadow:var(--shadow);}
-.auth-card h2{font-size:22px; font-weight:600; margin-bottom:4px;}
-.auth-card .sub{color:var(--muted); font-size:13.5px; margin-bottom:16px; font-weight:500;}
-.seg{display:flex; background:var(--bg-2); border-radius:14px; padding:4px; margin-bottom:18px;}
-.seg button{flex:1; border:none; background:none; padding:11px; border-radius:11px; font-weight:700; font-size:14px; color:var(--muted); cursor:pointer; transition:.15s;}
-.seg button.on{background:var(--paper); color:var(--ink); box-shadow:0 2px 9px rgba(70,45,10,.12);}
-.auth-err{background:var(--clay-soft); color:var(--clay); font-size:13px; font-weight:600; padding:11px 14px; border-radius:12px; margin-bottom:13px; display:none;}
-.auth-err.show{display:block;}
-.auth-note{font-size:12px; color:var(--muted); text-align:center; margin-top:18px; line-height:1.65;}
-.mode-badge{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:6px 13px; border-radius:20px;}
-.mode-cloud{background:var(--mint-soft); color:var(--mint-ink);} .mode-local{background:var(--saffron-soft); color:var(--saffron-2);}
 
 /* ---------- Sheet ---------- */
 .sheet-top{background:var(--paper); border:1px solid var(--line); border-radius:var(--r); padding:15px; box-shadow:var(--shadow-sm); margin-bottom:13px;}
@@ -47,11 +28,12 @@
 .srow-in input{width:100%; padding:12px 13px; font-size:16px; border:1.7px solid var(--line); border-radius:12px; background:var(--paper-2); outline:none; transition:border-color .15s;}
 .srow-in input:focus{border-color:var(--saffron); background:#fff;}
 .pay-method{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
-.pay-method label{display:block; margin:0;}
-.pay-method input{position:absolute; opacity:0; pointer-events:none;}
-.pay-method span{height:42px; display:flex; align-items:center; justify-content:center; gap:8px; border:1.7px solid var(--line); border-radius:12px; background:var(--paper-2); color:var(--ink-2); font-size:13px; font-weight:800; transition:border-color .15s, background .15s, color .15s, box-shadow .15s;}
+.pay-method label{display:block; margin:0; position:relative;}
+.pay-method input{position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;}
+.pay-method input + span{height:42px; display:flex; align-items:center; justify-content:center; gap:8px; border:1.7px solid var(--line); border-radius:12px; background:var(--paper-2); color:var(--ink-2); font-size:13px; font-weight:800; transition:border-color .15s, background .15s, color .15s, box-shadow .15s;}
 .pay-method input:checked + span{border-color:var(--saffron); background:#fff7e8; color:var(--ink); box-shadow:0 3px 10px rgba(207,116,21,.12);}
-.gpay-mark{width:28px; height:22px; flex:0 0 auto; background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 64'%3E%3Cg fill='none' stroke-linecap='round' stroke-width='20'%3E%3Cpath d='M20 38 36 12' stroke='%234285F4'/%3E%3Cpath d='M38 12 66 28' stroke='%2334A853'/%3E%3Cpath d='M36 52 50 28' stroke='%23FBBC05'/%3E%3Cpath d='M66 28 54 50' stroke='%23EA4335'/%3E%3C/g%3E%3C/svg%3E");}
+.gpay-option span{height:auto; border:0; border-radius:0; background:transparent; box-shadow:none;}
+.gpay-mark{width:26px; height:20px; flex:0 0 26px; background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 64'%3E%3Cg fill='none' stroke-linecap='round' stroke-width='20'%3E%3Cpath d='M20 38 36 12' stroke='%234285F4'/%3E%3Cpath d='M38 12 66 28' stroke='%2334A853'/%3E%3Cpath d='M36 52 50 28' stroke='%23FBBC05'/%3E%3Cpath d='M66 28 54 50' stroke='%23EA4335'/%3E%3C/g%3E%3C/svg%3E");}
 .collect-pay{margin-bottom:8px;}
 .srow-calc{display:flex; gap:8px; margin-top:12px;}
 .srow-calc .c{flex:1; text-align:center; background:var(--paper-2); border:1px solid var(--line-2); border-radius:11px; padding:7px 4px;}
