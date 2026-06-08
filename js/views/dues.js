@@ -55,9 +55,14 @@ export function saveCollect(afterSave) {
   const methodInput = document.querySelector('input[name="collectMethod"]:checked');
   const method = methodInput ? methodInput.value : "cash";
   const previous = d.payments[collectId];
+  const prevCash = previous && previous.cash != null ? (previous.cash || 0)
+    : (previous && previous.method !== "gpay" ? paymentAmount(previous) : 0);
+  const prevGpay = previous && previous.gpay != null ? (previous.gpay || 0)
+    : (previous && previous.method === "gpay" ? paymentAmount(previous) : 0);
   d.payments[collectId] = {
     amount: paymentAmount(previous) + amt,
-    method
+    cash: prevCash + (method === "cash" ? amt : 0),
+    gpay: prevGpay + (method === "gpay" ? amt : 0)
   };
   saveDay(k);
   closeM("mCollect");

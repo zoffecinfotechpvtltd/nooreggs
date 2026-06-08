@@ -59,10 +59,17 @@ export function dayStats(k) {
     const p = d.payments[cid];
     const amt = paymentAmount(p);
     pay += amt;
-    if (p && typeof p === "object" && p.method === "gpay") gpay += amt;
-    else cash += amt;
+    if (p && typeof p === "object" && p.cash != null) {
+      cash += p.cash || 0;
+      gpay += p.gpay || 0;
+    } else if (p && typeof p === "object" && p.method === "gpay") {
+      gpay += amt;
+    } else {
+      cash += amt;
+    }
   }
-  return { eggs, sell, buy, profit: sell - buy, got: recv + pay, pend: sell - recv, cash, gpay };
+  const got = recv + pay;
+  return { eggs, sell, buy, profit: sell - buy, got, pend: sell - got, cash, gpay };
 }
 
 // cumulative balance per customer across ALL days
@@ -73,11 +80,13 @@ export function outstanding() {
   for (const k in state.days) {
     const d = state.days[k];
     for (const cid in (d.deliveries || {})) {
+      if (!(cid in bal)) continue; // skip deleted customers
       const s = deliveryStats(d.deliveries[cid], d);
-      bal[cid] = (bal[cid] || 0) + s.pending;
+      bal[cid] += s.pending;
     }
     for (const cid in (d.payments || {})) {
-      bal[cid] = (bal[cid] || 0) - paymentAmount(d.payments[cid]);
+      if (!(cid in bal)) continue; // skip deleted customers
+      bal[cid] -= paymentAmount(d.payments[cid]);
     }
   }
   return bal;

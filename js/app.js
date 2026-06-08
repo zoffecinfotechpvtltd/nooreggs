@@ -76,7 +76,12 @@ function wireEvents() {
       case "delete-day": deleteRecordDay(id, refreshSyncedViews); break;
       case "open-collect": openCollect(id); break;
       case "collect-full": collectFull(); break;
-      case "save-collect": saveCollect(() => { renderToday(); }); break;
+      case "save-collect": saveCollect(() => {
+        renderToday();
+        renderDues();
+        const sd = document.getElementById("sheetDate");
+        if (sd && sd.value) renderSheet();
+      }); break;
       case "save-settings": saveSettingsRates(() => { renderToday(); const sd = document.getElementById("sheetDate"); if (sd && sd.value) renderSheet(); }); break;
       case "delete-all-data": clearAllData(refreshSyncedViews); break;
       case "export": exportData(); break;

@@ -87,7 +87,7 @@ export function renderRecords() {
         <div class="fg"><div class="k">Buying</div><div class="v">${rupee(s.buy)}</div></div>
         <div class="fg got"><div class="k">Got</div><div class="v">${rupee(s.got)}</div></div>
       </div>
-      <div class="figs" style="margin-top:7px"><div class="fg pend" style="grid-column:1/-1"><div class="k">Pending generated this day</div><div class="v">${rupee(s.pend)}</div></div></div>
+      <div class="figs" style="margin-top:7px"><div class="fg ${s.pend > 0 ? "pend" : "got"}" style="grid-column:1/-1"><div class="k">Pending generated this day</div><div class="v">${s.pend > 0 ? rupee(s.pend) : "₹0"}</div></div></div>
       ${dateMode ? recordCustomerRows(k) : ""}
       <button class="btn btn-clay btn-sm day-delete" data-act="delete-day" data-id="${k}">Delete this day</button>
     </div>`;
@@ -99,7 +99,6 @@ export function deleteRecordDay(k, afterDelete) {
   confirmDo("Delete " + dayLabel(k) + "?", "This removes that day's sheet, payments, profit, and pending history from this device.", "Delete Day", async () => {
     try {
       await deleteDayDoc(k);
-      delete state.days[k];
       if (pickedDate === k) {
         pickedDate = "";
         const dateEl = document.getElementById("recDate");

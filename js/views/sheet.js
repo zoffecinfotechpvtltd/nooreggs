@@ -2,10 +2,11 @@
 //  views/sheet.js — the daily entry sheet
 // ============================================================
 import { state } from "../state.js";
-import { deliveryStats, ensureDay, outstanding } from "../calc.js";
+import { deliveryStats, ensureDay, outstanding, paymentAmount } from "../calc.js";
 import { rupee, esc, todayKey, dayLabel } from "../utils.js";
 import { openM, closeM, toast } from "../ui.js";
 import { saveDay } from "../backend.js";
+import { renderToday } from "./today.js";
 
 let saveTimer;
 
@@ -94,7 +95,8 @@ const GPAY_ICON = `<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="
 function recalcRow(cid) {
   const d = ensureDay(getSheetKey()), v = rowRead(cid);
   const s = deliveryStats(v, d);
-  const pend = s.pending;
+  const extraPay = paymentAmount(d.payments && d.payments[cid]);
+  const pend = s.pending - extraPay;
   document.getElementById("sl_" + cid).textContent = rupee(s.sale);
   document.getElementById("pf_" + cid).textContent = rupee(s.profit);
   const pd = document.getElementById("pd_" + cid), pc = pd.parentNode;
@@ -103,14 +105,15 @@ function recalcRow(cid) {
   document.getElementById("sr_" + cid).classList.toggle("has", v.eggs > 0 || v.received > 0);
 }
 function recalcTotals() {
-  const d = ensureDay(getSheetKey());
-  let eggs = 0, sale = 0, cost = 0, rec = 0;
+  const k = getSheetKey(), d = ensureDay(k);
+  let eggs = 0, sale = 0, cost = 0, rec = 0, extraPay = 0;
   state.customers.forEach(c => {
     const s = deliveryStats(rowRead(c.id), d);
     eggs += s.eggs; sale += s.sale;
     cost += s.buy; rec += s.received;
   });
-  const profit = sale - cost, pend = sale - rec;
+  for (const cid in (d.payments || {})) extraPay += paymentAmount(d.payments[cid]);
+  const profit = sale - cost, got = rec + extraPay, pend = sale - got;
   document.getElementById("sheetTotals").innerHTML = `
     <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:'DM Sans';font-weight:700;margin-bottom:13px">📋 Day Totals</h3>
     <div class="grid2">
@@ -118,8 +121,8 @@ function recalcTotals() {
       <div class="stat flat"><div class="k">Selling total</div><div class="v">${rupee(sale)}</div></div>
       <div class="stat flat"><div class="k">Buying total</div><div class="v">${rupee(cost)}</div></div>
       <div class="stat flat mint"><div class="k">Profit today</div><div class="v">${rupee(profit)}</div></div>
-      <div class="stat flat mint"><div class="k">Received</div><div class="v">${rupee(rec)}</div></div>
-      <div class="stat flat clay"><div class="k">Pending today</div><div class="v">${rupee(pend)}</div></div>
+      <div class="stat flat mint"><div class="k">Collected</div><div class="v">${rupee(got)}</div></div>
+      <div class="stat flat ${pend > 0 ? "clay" : "mint"}"><div class="k">Pending today</div><div class="v">${pend > 0 ? rupee(pend) : "₹0"}</div></div>
     </div>`;
 }
 
@@ -150,5 +153,5 @@ export function saveDayRates() {
   const k = getSheetKey(), d = ensureDay(k);
   d.buyRate = parseFloat(document.getElementById("rBuy").value) || 0;
   d.sellRate = parseFloat(document.getElementById("rSell").value) || 0;
-  saveDay(k); closeM("mRates"); renderSheet(); toast("Rates updated");
+  saveDay(k); closeM("mRates"); renderSheet(); renderToday(); toast("Rates updated");
 }

@@ -15,7 +15,7 @@ export function renderToday() {
   document.getElementById("hBuy").textContent = rupee(st.buy);
   document.getElementById("hEggs").textContent = st.eggs.toLocaleString("en-IN");
   document.getElementById("hGot").textContent = rupee(st.got);
-  document.getElementById("hPendDay").textContent = rupee(st.pend);
+  document.getElementById("hPendDay").textContent = st.pend > 0 ? rupee(st.pend) : "₹0";
   document.getElementById("hDuesAll").textContent = rupee(totalDues());
   renderSpark();
   renderCollectionSplit(st);
@@ -36,7 +36,7 @@ function renderCollectionSplit(st) {
   if (!card) return;
   const { cash, gpay, got } = st;
   if (got <= 0) { card.style.display = "none"; return; }
-  card.style.display = "";
+  card.style.display = "block";
   document.getElementById("splitDonut").innerHTML = collectionDonut(cash, gpay);
   document.getElementById("splitCash").textContent = rupee(cash);
   document.getElementById("splitGpay").textContent = rupee(gpay);
@@ -61,7 +61,7 @@ function collectionDonut(cash, gpay) {
     gpayArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#4285F4" stroke-width="${sw}"/>`;
   } else {
     cashArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#34A853" stroke-width="${sw}" stroke-dasharray="${cashLen} ${C}" stroke-dashoffset="0"/>`;
-    gpayArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#4285F4" stroke-width="${sw}" stroke-dasharray="${gpayLen} ${C}" stroke-dashoffset="${+(C - cashLen).toFixed(2)}"/>`;
+    gpayArc = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#4285F4" stroke-width="${sw}" stroke-dasharray="${gpayLen} ${C}" stroke-dashoffset="${+(gpayLen + C - cashLen).toFixed(2)}"/>`;
   }
   return `<svg width="88" height="88" viewBox="0 0 88 88" style="transform:rotate(-90deg)">${cashArc}${gpayArc}</svg>`;
 }
