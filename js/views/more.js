@@ -22,11 +22,9 @@ export function saveSettingsRates(afterSave) {
   state.settings.buyRate = b;
   state.settings.sellRate = s;
   saveSettings();
-  // apply to today if today has no entries yet
+  // always apply to today — "old days keep their own rates" means past days, not today
   const k = todayKey();
-  if (!state.days[k] || Object.keys(state.days[k].deliveries || {}).length === 0) {
-    const d = ensureDay(k); d.buyRate = b; d.sellRate = s; saveDay(k);
-  }
+  const d = ensureDay(k); d.buyRate = b; d.sellRate = s; saveDay(k);
   toast("Rates saved");
   if (afterSave) afterSave();
 }
