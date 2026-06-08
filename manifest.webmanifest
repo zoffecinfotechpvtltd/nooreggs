@@ -1,0 +1,15 @@
+{
+  "name": "NOOR EGGS CENTRE — Daily Ledger",
+  "short_name": "NOOR EGGS",
+  "description": "Daily egg sales, profit, dues and records.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#10463a",
+  "theme_color": "#10463a",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

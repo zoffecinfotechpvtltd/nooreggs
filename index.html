@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#10463a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>NOOR EGGS · Daily Ledger</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/views.css">
+</head>
+<body>
+
+<!-- ===== Loading ===== -->
+<div id="screen-loading">
+  <img src="assets/logo.png" alt="logo">
+  <div class="nm">NOOR EGGS CENTRE</div>
+  <div class="spinner"></div>
+</div>
+
+<!-- ===== App ===== -->
+<div id="app">
+  <header class="bar">
+    <div class="row">
+      <div class="who">
+        <img src="assets/logo.png" alt="logo">
+        <div><h1>NOOR EGGS</h1><div class="d" id="barDate">—</div></div>
+      </div>
+      <div class="avatar" id="uAvatar" data-nav="more">N</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- TODAY -->
+    <section id="view-today" class="view active">
+      <div class="hero">
+        <svg class="spark" id="spark" width="96" height="36" viewBox="0 0 96 36"></svg>
+        <div class="lbl">Today's Profit</div>
+        <div class="big pos" id="hProfit">₹0</div>
+        <div class="pl">
+          <div class="it"><div class="k">Selling total</div><div class="v" id="hSell">₹0</div></div>
+          <div class="it"><div class="k">Buying total</div><div class="v" id="hBuy">₹0</div></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="stat saffron"><div class="k">🥚 Eggs sold</div><div class="v" id="hEggs">0</div></div>
+        <div class="stat mint"><div class="k">💰 Collected</div><div class="v" id="hGot">₹0</div></div>
+        <div class="stat clay"><div class="k">⏳ Pending today</div><div class="v" id="hPendDay">₹0</div></div>
+        <div class="stat clay"><div class="k">📌 Total dues</div><div class="v" id="hDuesAll">₹0</div></div>
+      </div>
+      <button class="btn btn-saffron" style="margin-top:14px" data-nav="sheet">📝 Fill Today's Sheet</button>
+      <div class="section-h"><h3>Top pending customers</h3><button class="lnk" data-nav="dues">See all →</button></div>
+      <div id="todayDues"></div>
+    </section>
+
+    <!-- SHEET -->
+    <section id="view-sheet" class="view">
+      <div class="vtitle">Daily Sheet<small>Enter eggs &amp; payment per customer. Saves automatically.</small></div>
+      <div class="sheet-top">
+        <div class="date-row">
+          <div class="field"><label>Sheet date</label><input id="sheetDate" type="date"></div>
+          <button class="btn btn-ghost btn-sm" data-act="sheet-today">Today</button>
+        </div>
+        <div class="rate-chips">
+          <div class="rate-chip" data-act="open-rates"><div class="k">Buy / 100</div><div class="v" id="rcBuy">₹0</div></div>
+          <div class="rate-chip" data-act="open-rates"><div class="k">Sell / 100</div><div class="v" id="rcSell">₹0</div></div>
+          <div class="rate-chip" data-act="open-rates"><div class="k">Margin / 100</div><div class="v" id="rcMargin">₹0</div></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" style="margin-bottom:13px" data-act="open-customer">＋ Add New Customer</button>
+      <div id="sheetList"></div>
+      <div class="card" id="sheetTotals" style="display:none"></div>
+      <button class="btn btn-teal" data-act="force-save-sheet">✓ Save Sheet</button>
+      <div class="credit" style="padding-top:18px">Customer names stay every day · each new day starts blank</div>
+    </section>
+
+    <!-- DUES -->
+    <section id="view-dues" class="view">
+      <div class="vtitle">Collect Dues<small>Everyone who still owes — go collect &amp; update.</small></div>
+      <div class="grid2" style="margin-bottom:15px">
+        <div class="stat clay"><div class="k">Total to collect</div><div class="v" id="dTotal">₹0</div></div>
+        <div class="stat saffron"><div class="k">People pending</div><div class="v" id="dCount">0</div></div>
+      </div>
+      <div id="duesList"></div>
+    </section>
+
+    <!-- RECORDS -->
+    <section id="view-records" class="view">
+      <div class="vtitle">Records<small>Day-by-day sales, profit &amp; pending history.</small></div>
+      <div class="filter-pills">
+        <div class="fpill on" id="fp10" data-range="10">10 days</div>
+        <div class="fpill" id="fp30" data-range="30">30 days</div>
+        <div class="fpill" id="fpAll" data-range="0">All</div>
+      </div>
+      <div class="record-date">
+        <div class="field"><label>See one date</label><input id="recDate" type="date"></div>
+        <button class="btn btn-ghost btn-sm" data-act="clear-rec-date">Clear</button>
+      </div>
+      <div class="card" id="recSummary" style="display:none"></div>
+      <div id="recList"></div>
+    </section>
+
+    <!-- MORE -->
+    <section id="view-more" class="view">
+      <div class="vtitle">Account &amp; Settings</div>
+      <div class="profile-strip">
+        <div class="av" id="mAv">N</div>
+        <div style="min-width:0"><div class="e" id="mEmail">—</div><div class="m" id="mMode">—</div></div>
+      </div>
+      <div class="card">
+        <h3>Egg Rates (per 100 eggs)</h3>
+        <div class="hint" style="margin-bottom:13px">Buying rate = what eggs cost you. Selling rate = what you charge. Profit is auto-calculated. Old days keep their own rates.</div>
+        <div class="field"><label>Buying rate ₹ / 100</label><input id="setBuy" type="number" inputmode="numeric" placeholder="e.g. 540"></div>
+        <div class="field"><label>Selling rate ₹ / 100</label><input id="setSell" type="number" inputmode="numeric" placeholder="e.g. 620"></div>
+        <button class="btn btn-saffron" data-act="save-settings">Save Rates</button>
+      </div>
+      <div class="card">
+        <h3>Backup</h3>
+        <div class="hint" style="margin-bottom:13px">Your data is in the cloud when logged in. Keep an offline copy too if you like.</div>
+        <div class="btn-row"><button class="btn btn-mint btn-sm" data-act="export">⬇ Download</button><button class="btn btn-ghost btn-sm" data-act="import">⬆ Restore</button></div>
+        <input id="impFile" type="file" accept=".json" style="display:none">
+      </div>
+      <div class="card danger-card">
+        <h3>Delete Data</h3>
+        <div class="hint" style="margin-bottom:13px">Deletes customers, sheets, records, dues, and rates from this account.</div>
+        <button class="btn btn-clay" data-act="delete-all-data">Delete All Data</button>
+      </div>
+      <div class="card">
+        <h3>Install as app</h3>
+        <div class="hint">Open this page in <b>Chrome</b> → tap <b>⋮</b> → <b>“Add to Home screen”</b>. It opens full-screen like a real app, the hen icon lands on your phone, and it works offline.</div>
+      </div>
+      <div class="credit" style="padding-top:20px">Created By <b>Danish Shaikh</b> · NOOR EGGS CENTRE</div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button data-nav="today" class="on"><span class="ic">🏠</span>Today</button>
+    <button data-nav="sheet"><span class="ic">📝</span>Sheet</button>
+    <button data-nav="dues"><span class="ic add">＋</span>Collect</button>
+    <button data-nav="records"><span class="ic">📊</span>Records</button>
+    <button data-nav="more"><span class="ic">👤</span>More</button>
+  </nav>
+</div>
+
+<!-- Customer modal -->
+<div class="mbg" id="mCust"><div class="modal"><div class="grip"></div>
+  <h2 id="custTitle">Add Customer</h2><div class="msub">This name stays on your sheet every day.</div>
+  <div class="field"><label>Name</label><input id="cName" type="text" placeholder="Customer name"></div>
+  <div class="field"><label>Phone (optional)</label><input id="cPhone" type="tel" inputmode="tel" placeholder="Mobile number"></div>
+  <label class="checkline"><input id="cDefault" type="checkbox"> <span>Default daily customer</span></label>
+  <button class="btn btn-saffron" data-act="save-customer">Save</button>
+  <button class="btn btn-ghost" style="margin-top:10px" data-close="mCust">Cancel</button>
+</div></div>
+
+<!-- Rates modal -->
+<div class="mbg" id="mRates"><div class="modal"><div class="grip"></div>
+  <h2>Rates for this day</h2><div class="msub" id="ratesSub">Sets the buy &amp; sell price for this date.</div>
+  <div class="field"><label>Buying rate ₹ / 100</label><input id="rBuy" type="number" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label>Selling rate ₹ / 100</label><input id="rSell" type="number" inputmode="numeric" placeholder="0"></div>
+  <button class="btn btn-saffron" data-act="save-day-rates">Apply to this day</button>
+  <button class="btn btn-ghost" style="margin-top:10px" data-close="mRates">Cancel</button>
+</div></div>
+
+<!-- Collect modal -->
+<div class="mbg" id="mCollect"><div class="modal"><div class="grip"></div>
+  <h2>Collect Payment</h2><div class="msub" id="colSub">—</div>
+  <div class="bigamt" id="colBal">₹0</div>
+  <div class="field"><label>Amount collected now ₹</label><input id="colAmt" type="number" inputmode="numeric" placeholder="0"></div>
+  <div class="field"><label>Payment method</label><div class="pay-method collect-pay">
+    <label><input type="radio" name="collectMethod" value="cash" checked><span>Cash</span></label>
+    <label><input type="radio" name="collectMethod" value="gpay"><span class="gpay-option"><span class="gpay-mark" aria-hidden="true"></span><span>GPay</span></span></label>
+  </div></div>
+  <button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:6px" data-act="collect-full">Collect full pending</button>
+  <button class="btn btn-mint" style="margin-top:10px" data-act="save-collect">Save Collection</button>
+  <button class="btn btn-ghost" style="margin-top:10px" data-close="mCollect">Cancel</button>
+</div></div>
+
+<!-- Confirm modal -->
+<div class="mbg" id="mConfirm"><div class="modal"><div class="grip"></div>
+  <h2 id="cfTitle">Are you sure?</h2><div class="msub" id="cfMsg"></div>
+  <button class="btn btn-clay" id="cfYes">Yes</button>
+  <button class="btn btn-ghost" style="margin-top:10px" data-close="mConfirm">Cancel</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="js/app.js"></script>
+<script>
+  // register service worker for offline + installability (ignored on file://)
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(()=>{}));
+  }
+</script>
+</body>
+</html>
